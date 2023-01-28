@@ -6,9 +6,9 @@ import sensor,lcd,time,utime,image
 import KPU as kpu
 import uos
 
-#函数模块部分
+#Function module part
 ###############
-#刷屏
+#clear 1
 ###############
 def clear():
     lcd.draw_string(0, 0, "               ",lcd.WHITE, lcd.WHITE)
@@ -38,7 +38,7 @@ def clear():
     utime.sleep_ms(10)
 
 ###############
-#刷屏2
+#clear 2
 ###############
 def clear2():
 
@@ -55,10 +55,10 @@ def clear2():
     lcd.draw_string(0, 180, "              ",lcd.WHITE, lcd.WHITE)
     utime.sleep_ms(10)
 ###############
-#初始化函数
+#Initialization function
 ###############
 def all_init():
-    fm.register(12, fm.fpioa.GPIO0)#映射引脚与初始化
+    fm.register(12, fm.fpioa.GPIO0)#Map pins and initializations
 
     fm.register(10, fm.fpioa.GPIOHS10)
     fm.register(11, fm.fpioa.GPIOHS11)
@@ -68,13 +68,13 @@ def all_init():
     fm.register(19, fm.fpioa.GPIOHS19)
     fm.register(20, fm.fpioa.GPIOHS20)
 
-    global LED1   #引脚10
-    global BEER   #引脚11
+    global LED1   #PIN10
+    global BEER   #PIN11
 
-    global DOOR   #引脚9
-    global MQ3    #引脚18
-    global BUTTON #引脚19
-    global KEY    #引脚20
+    global DOOR   #PIN9
+    global MQ3    #PIN18
+    global BUTTON #PIN19
+    global KEY    #PIN20
 
     global BUTTON_state
     BUTTON_state=0
@@ -93,16 +93,16 @@ def all_init():
     KEY    = GPIO(GPIO.GPIOHS20,GPIO.IN,GPIO.PULL_UP)
 
     clock = time.clock()
-    #设置摄像头
+    #init the camera
     sensor.reset()
     #sensor.set_vflip(1)
     sensor.set_pixformat(sensor.RGB565)
     sensor.set_framesize(sensor.QVGA)
-    sensor.skip_frames(time = 2000)     # 等待设置生效.
+    sensor.skip_frames(time = 2000)     # Wait for the Settings to take effect
     clock = time.clock()
 
 #############
-#人脸识别初始化部分
+#Face recognition initialization
 #############
 def face_init():
     global task
@@ -111,7 +111,7 @@ def face_init():
     a = kpu.init_yolo2(task, 0.1, 0.3, 5, anchor)
 
 #############
-#人脸识别判断部分
+#Face recognition judgment
 #############
 def face_judgment():
     clock.tick()
@@ -129,7 +129,7 @@ def face_judgment():
         people = 1
 
 #############
-#蜂鸣器部分
+#The buzzer 
 #############
 def beer_control(n):
     if n == 1:
@@ -138,7 +138,7 @@ def beer_control(n):
         BEER.value(1)
 
 #############
-#LED指示灯部分
+#LED indicating lamp
 #############
 def LED_control(n):
     if n == 1:
@@ -147,14 +147,14 @@ def LED_control(n):
         LED1.value(0)
 
 #############
-#LCD显示屏初始化部分
+#Initialize the LCD display
 #############
 def LCD_init():
-    #lcd.init() #初始化LCD
+    #lcd.init()
     lcd.init()
     lcd.freq(10000000)
-    lcd.clear(lcd.WHITE) #清屏白色
-    lcd.rotation(1) #由于图像默认是240*320，因此顺时钟旋转90°。
+    lcd.clear(lcd.WHITE)
+    lcd.rotation(1) #由于图像默认是240*320，因此顺时钟旋转90°
     lcd.display(image.Image("demo1.bmp"))   #基底
     utime.sleep_ms(20)
     lcd.draw_string(210, 120, "  ",lcd.WHITE, lcd.RED) #酒精
